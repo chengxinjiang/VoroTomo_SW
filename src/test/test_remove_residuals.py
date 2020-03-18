@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from obspy.signal.regression import linear_regression
 
 # define rootpath and find all files
-rootpath = '/Users/chengxin/Documents/Research/Harvard/St_Helens/tomo/VoroTomo/real_data'
+rootpath = '/Users/chengxin/Documents/Research/Harvard/tomo/VoroTomo/real_data'
 pper = [3,4,5,6,8,10,12,14,16,18,20,24,28,32]
 
 # loop through each period
