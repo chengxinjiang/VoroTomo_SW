@@ -57,7 +57,7 @@ for iper in range(len(pper)):
     velall = np.zeros(((nlon+1)*(nlat+1),nset))                             # vector of the final model averaged over (nsets) times of realizations
 
     # find the observational data
-    dfile = os.path.join(rootpath,'dispersion/Rayleigh/data_snr8_'+str(per)+'s.dat')
+    dfile = os.path.join(rootpath,'dispersion/data_snr8_'+str(per)+'s.dat')
     if not os.path.isfile(dfile):
         raise ValueError('double check! cannot find %s'%dfile)
 
@@ -98,7 +98,7 @@ for iper in range(len(pper)):
     #print('old and new averages are %6.3f %6.3f'%(ave,nave))
 
     # output into txt file
-    latgrid = np.linspace(latmin,latmin+nlat*dlat,nlat+1) 
+    latgrid = np.linspace(latmin+nlat*dlat,latmin,nlat+1) 
     longrid = np.linspace(lonmin,lonmin+nlon*dlon,nlon+1)
     lon,lat = np.meshgrid(longrid,latgrid)
 
@@ -109,9 +109,6 @@ for iper in range(len(pper)):
             vel_abs[ii],vel_std[ii]))
     fout.close()
 
-    # re-arrange the matrix for pykonal
-    tvel1 = vel_abs.reshape(lon.shape)
-    tvel2 = np.flip(tvel1,axis=0)
 
     #######################################
     ######## CALCULATE RESIDUALS ##########
@@ -119,7 +116,7 @@ for iper in range(len(pper)):
 
     if cal_resid:
         sphgrid = subf.construct_grid(geogrid,ave)  
-        sphgrid['vel1'] = np.reshape(tvel2,(1,sphgrid['ntheta'],sphgrid['nphi']))
+        sphgrid['vel1'] = np.reshape(vel_abs,(1,sphgrid['ntheta'],sphgrid['nphi']))
         fname = os.path.join(rootpath,'residuals/tomo_'+str(per)+'s.txt')                     
         res_initial,res_final = subf.calculate_residuals(data,geogrid,sphgrid,fname)
         

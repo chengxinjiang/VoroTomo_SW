@@ -39,14 +39,14 @@ RR = 6371.
 ##########################################
 
 # define the absolute path of data and project
-rootpath = '/Users/chengxinjiang/Documents/ANU/Voro_Tomo/synthetic'
-data = glob.glob(os.path.join(rootpath,'data_snr8_24s.dat'))
+rootpath = '/Users/chengxinjiang/Documents/Github/VoroTomo_SW/example/real_data'
+data = glob.glob(os.path.join(rootpath,'dispersion/LVC_snr8_2wl_8s.dat'))
 
 # useful parameters for location and inversion
 ncell = 300                                                                 # number of Voronoi cells for the target region
 nsets = 300                                                                 # number of realizations
-latmin,dlat,nlat = 35.5,0.02,100                                            # latitude range of the target region
-lonmin,dlon,nlon = -120.0,0.02,100                                          # longitude range of the target region
+latmin,dlat,nlat = 35.5,0.05,110                                            # latitude range of the target region
+lonmin,dlon,nlon = -122.5,0.05,100                                          # longitude range of the target region
 velall           = np.zeros(((nlon+1)*(nlat+1),nsets))                      # vector of the final model averaged over (nsets) times of realizations
 geogrid = {'latmin':latmin,'lonmin':lonmin,                                 # assemble geographic info into a dict
             'dlat':dlat,'dlon':dlon,
@@ -105,7 +105,7 @@ for iset in range(rank,splits,size):
 
         # loop through each virtual source
         for isc in srcs:
-            print(ridx,len(srcs),isc)
+            print(ridx,len(srcs),isc,end='\r')
 
             # source location to initialize the traveltime field
             arr4rc = dfile_sub[dfile_sub.evt_id.values==isc]

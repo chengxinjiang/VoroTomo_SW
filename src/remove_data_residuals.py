@@ -45,7 +45,7 @@ for ii in range(len(pper)):
 
     # make selections
     indx = np.where((res2>=ave2-2*std2)&(res2<=ave2+2*std2))[0]
-    fout = open(rootpath+'/dispersion/Rayleigh/selection2_'+str(per)+'s.dat','w')
+    fout = open(rootpath+'/dispersion/selection2_'+str(per)+'s.dat','w')
     fout.write('index,evt_id,evt_lon,evt_lat,sta_id,sta_lon,sta_lat,vel,dist\n')
     for jj in range(len(indx)):
         tindx = indx[jj]
@@ -81,6 +81,6 @@ for ii in range(len(pper)):
     plt.text(15+np.min(dist),0.85*np.max(tt),text)
     plt.title(str(per)+'s final model')
     plt.colorbar()
-    outname = rootpath+'/dispersion/Rayleigh/obs2_residual_'+str(per)+'s.pdf'
+    outname = rootpath+'/dispersion/obs2_residual_'+str(per)+'s.pdf'
     plt.savefig(outname,format='pdf',dpi=300)
     #plt.show()

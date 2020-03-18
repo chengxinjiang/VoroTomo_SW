@@ -438,7 +438,7 @@ def plot_tomo(geogrid,vel,rootpath,iset=-1):
 
     # plot figures
     plt.figure(figsize=(10,10))
-    plt.imshow(vel.reshape(nlat+1,nlon+1),cmap='jet',extent=(lonmin,lonmax,latmin,latmax))
+    plt.imshow(vel.reshape(nlat+1,nlon+1),cmap='jet_r',extent=(lonmin,lonmax,latmin,latmax))
     plt.gca().invert_yaxis()
     plt.xlim([lonmin,lonmax])
     plt.ylim([latmin,latmax])

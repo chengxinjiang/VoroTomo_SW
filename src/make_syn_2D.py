@@ -15,15 +15,15 @@ by Chengxin Jiang@ANU (Mar/2020)
 
 # radius of Earth
 RR = 6371.
-syn_option = 'spherical'
+syn_option = 'checkerboard'
 
 # absoluate path for traveltime data and for output
-rootpath = '/Users/chengxinjiang/Documents/ANU/Voro_Tomo/synthetic'
-dfiles   = glob.glob(os.path.join(rootpath,'dispersion/Rayleigh/data_snr8_10s.dat'))
+rootpath = '/Users/chengxinjiang/Documents/Github/VoroTomo_SW/example/synthetic'
+dfiles   = glob.glob(os.path.join(rootpath,'dispersion/LVC_snr8_2wl_8s.dat'))
 
 # full 2D research area
-latmin,dlat,nlat = 35.5,0.02,100                                            # latitude range of the target region
-lonmin,dlon,nlon = -120.0,0.02,100                                          # longitude range of the target region
+latmin,dlat,nlat = 35.5,0.05,110                                            # latitude range of the target region
+lonmin,dlon,nlon = -122.5,0.05,100                                          # longitude range of the target region
 geogrid = {'latmin':latmin,'lonmin':lonmin,                                 # assemble geographic info into a dict 
             'dlat':dlat,'dlon':dlon,
             'nlat':nlat,'nlon':nlon}
@@ -74,7 +74,7 @@ for iper in range(len(dfiles)):
     srcs    = data.evt_id.unique()
 
     # output file
-    fout  = open(os.path.join(rootpath,dfiles[iper].split('/')[-1]),'w')
+    fout  = open(os.path.join(rootpath,'syn_'+dfiles[iper].split('/')[-1]),'w')
     fout.write('index,evt_id,evt_lon,evt_lat,sta_id,sta_lon,sta_lat,vel,dist\n')
 
     # loop through each virtual source
