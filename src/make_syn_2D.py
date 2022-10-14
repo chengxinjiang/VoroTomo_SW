@@ -18,12 +18,12 @@ RR = 6371.
 syn_option = 'checkerboard'
 
 # absoluate path for traveltime data and for output
-rootpath = '/Users/chengxinjiang/Documents/Github/VoroTomo_SW/example/synthetic'
-dfiles   = glob.glob(os.path.join(rootpath,'dispersion/LVC_snr8_2wl_8s.dat'))
+rootpath = '/Users/chengxin/Documents/ANU/St_Helens/Voro_Tomo/synthetic/Oct4_WithNoise_0.5s_spacing2/Love'
+dfiles   = glob.glob(os.path.join(rootpath,'selection_*s.dat'))
 
 # full 2D research area
-latmin,dlat,nlat = 35.5,0.05,110                                            # latitude range of the target region
-lonmin,dlon,nlon = -122.5,0.05,100                                          # longitude range of the target region
+latmin,dlat,nlat = 44.5,0.02,190                                            # latitude range of the target region
+lonmin,dlon,nlon = -124.8,0.02,310                                          # longitude range of the target region
 geogrid = {'latmin':latmin,'lonmin':lonmin,                                 # assemble geographic info into a dict 
             'dlat':dlat,'dlon':dlon,
             'nlat':nlat,'nlon':nlon}
@@ -31,8 +31,9 @@ geogrid = {'latmin':latmin,'lonmin':lonmin,                                 # as
 if syn_option=='checkerboard':
     # target anomaly information
     anomaly = {'avs':3,'amp':0.3,                                           # amplitude in percentage
-                'size':15,'spacing': True,                                  # size of anomaly and whether of spacing
-                'noise':0.3}
+                'size':15,'spacing': 2,                                      # size of anomaly and whether of spacing
+                'noise_ave':0,
+                'noise_std':0.5}
 
     # make sphgrid for traveltime prediction
     sphgrid = subf.construct_grid(geogrid,anomaly['avs'])                       # spherical grid data and initial velocity model
@@ -46,7 +47,7 @@ elif syn_option == 'spherical':
     anomaly = {'avs':3,'amp':-0.3,                                               # amplitude in percentage
                 'latmin':46.1,'latmax':46.4,                                     # size of anomaly and whether of spacing
                 'lonmin':-122.4,'lonmax':-122.1,
-                'noise':0.3}
+                'noise':0}
 
     # make sphgrid for traveltime prediction
     sphgrid = subf.construct_grid(geogrid,anomaly['avs'])                       # spherical grid data and initial velocity model
@@ -97,8 +98,9 @@ for iper in range(len(dfiles)):
                 theta_r,phi_r = subf.geo2sph(lat_r,lon_r)
                 src_pos  = (RR,theta_r,phi_r)
                 syn_data = solver.traveltime.value(np.array(src_pos))
-                if anomaly['noise']:
-                    syn_data += np.random.normal(loc=anomaly['noise'],scale=0.05)
+                if anomaly['noise_std']:
+                    syn_data += np.random.normal(loc=anomaly['noise_ave'],scale=anomaly['noise_std'])
+
                 fout.write('%6d,%6d,%8.3f,%8.3f,%6d,%8.3f,%8.3f,%8.3f,%8.3f\n'%(arr4rc['index'].iloc[irc],\
                     isc,lon_s,lat_s,arr4rc['sta_id'].iloc[irc],lon_r,lat_r,arr4rc['dist'].iloc[irc]/syn_data,\
                     arr4rc['dist'].iloc[irc]))

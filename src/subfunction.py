@@ -8,6 +8,7 @@ from scipy.spatial import Delaunay
 from scipy.sparse import coo_matrix
 from collections import defaultdict
 from matplotlib import pyplot as plt
+from scipy.ndimage import gaussian_filter
 
 '''
 subfunctions used in VoroTomo_2D
@@ -288,10 +289,8 @@ def make_checkerboard(geogrid,anomaly_info):
     '''
 
     # check the basic info of the targeted checkerboard
-    checker_vs   = anomaly_info['avs']
     checker_size = anomaly_info['size']
     checker_spa  = anomaly_info['spacing']
-    random_noise = anomaly_info['noise']
 
     # load parameters from the geogrid dict
     latmin,dlat,nlat = geogrid['latmin'],geogrid['dlat'],geogrid['nlat']+1
@@ -300,10 +299,10 @@ def make_checkerboard(geogrid,anomaly_info):
     # construct one basic anomaly
     if checker_spa:
         # spike input
-        anomaly1 = np.ones(4*checker_size,dtype=np.float32)
+        anomaly1 = np.ones(2*(checker_spa+1)*checker_size,dtype=np.float32)
         anomaly1[:checker_size] = -1
-        anomaly1[checker_size:2*checker_size] = 0
-        anomaly1[3*checker_size:] = 0
+        anomaly1[checker_size:(checker_spa+1)*checker_size] = 0
+        anomaly1[(checker_spa+2)*checker_size:] = 0
         anomaly2 = anomaly1*-1
         #anomaly3 = np.concatenate((anomaly1[checker_size:],anomaly1[:checker_size]))
     else:
@@ -324,6 +323,9 @@ def make_checkerboard(geogrid,anomaly_info):
             amp.append(np.tile(anomaly2,nchecker_lon)[:nlon])
         else:
             amp.append(np.zeros(nlon))
+
+    # smooth using a gaussian filter
+    amp= gaussian_filter(amp, sigma=1.5)
 
     return amp
 

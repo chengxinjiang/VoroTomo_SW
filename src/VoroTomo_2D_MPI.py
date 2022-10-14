@@ -39,14 +39,14 @@ RR = 6371.
 ##########################################
 
 # define the absolute path of data and project
-rootpath = '/Users/chengxinjiang/Documents/Github/VoroTomo_SW/example/real_data'
-data = glob.glob(os.path.join(rootpath,'dispersion/LVC_snr8_2wl_8s.dat'))
+rootpath = '/Users/chengxin/Documents/ANU/St_Helens/Voro_Tomo/synthetic/dispersion/Love'
+data = glob.glob(os.path.join(rootpath,'syn_selection_*.dat'))
 
 # useful parameters for location and inversion
-ncell = 300                                                                 # number of Voronoi cells for the target region
-nsets = 300                                                                 # number of realizations
-latmin,dlat,nlat = 35.5,0.05,110                                            # latitude range of the target region
-lonmin,dlon,nlon = -122.5,0.05,100                                          # longitude range of the target region
+ncell = 350                                                                 # number of Voronoi cells for the target region
+nsets = 50                                                                 # number of realizations
+latmin,dlat,nlat = 44.5,0.05,76                                             # latitude range of the target region
+lonmin,dlon,nlon = -124.8,0.05,124                                          # longitude range of the target region
 velall           = np.zeros(((nlon+1)*(nlat+1),nsets))                      # vector of the final model averaged over (nsets) times of realizations
 geogrid = {'latmin':latmin,'lonmin':lonmin,                                 # assemble geographic info into a dict
             'dlat':dlat,'dlon':dlon,
@@ -60,8 +60,6 @@ size = comm.Get_size()
 
 if rank==0:
     # make sub-directory to save intermediate files
-    if not os.path.isdir(os.path.join(rootpath,'figures')):
-        os.mkdir(os.path.join(rootpath,'figures'))
     if not os.path.isdir(os.path.join(rootpath,'iterations')):
         os.mkdir(os.path.join(rootpath,'iterations'))
 
@@ -86,10 +84,11 @@ for iset in range(rank,splits,size):
 
         # define the size of subsampling
         obs_all = len(dfile)
-        obs_sub = int(np.floor(obs_all*0.7))
+        obs_sub = int(np.floor(obs_all*0.8))
 
         # read traveltime info
-        ave     = float("{:.3f}".format(np.mean(dfile['vel'])))                     # averaged velocity from the observation
+        #ave     = float("{:.3f}".format(np.mean(dfile['vel'])))                     # averaged velocity from the observation
+        ave     = 3
         sphgrid = subf.construct_grid(geogrid,ave)                                  # spherical grid data and initial velocity model
 
         # generate parameters
@@ -167,7 +166,7 @@ for iset in range(rank,splits,size):
         np.savez_compressed(tname,vel=vel)
 
         # plot each inversion results
-        subf.plot_tomo(geogrid,vel,rootpath,iset)
+        #subf.plot_tomo(geogrid,vel,rootpath,iset)
 
 ############################################################
 ######### RUN construct_final_model_residuals NEXT #########

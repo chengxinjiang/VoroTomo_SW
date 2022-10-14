@@ -10,12 +10,12 @@ by Chengxin Jiang @ANU (Mar2020)
 '''
 
 # absolute path for the data
-rootpath = '/Users/chengxinjiang/Documents/Github/VoroTomo_SW/example/real_data'
-dfiles   = glob.glob(os.path.join(rootpath,'dispersion/LVC_snr8_*s.dat'))
+rootpath = '/Users/chengxin/Documents/ANU/St_Helens/CCFs/merge/Love_phase'
+dfiles   = glob.glob(os.path.join(rootpath,'data_snr8_*s.dat'))
 
 # loop through the file
 for ifile in dfiles:
-    data = pd.read_csv(ifile)
+    data = pd.read_csv(ifile,sep='\s+')
 
     # find the unique stations
     slon = np.array(data['lons'])
@@ -45,7 +45,7 @@ for ifile in dfiles:
             sta_list.append([rlon[ii],rlat[ii]])
 
     # output to a file
-    tfile = rootpath+'/dispersion/new_'+ifile.split('/')[-1]
+    tfile = rootpath+'/new_'+ifile.split('/')[-1]
     fout = open(tfile,'w')
     fout.write('index,evt_id,evt_lon,evt_lat,sta_id,sta_lon,sta_lat,vel,dist\n')
 
